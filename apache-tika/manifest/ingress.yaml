@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/issuer: "letsencrypt-prod"
+  name: apache-tika
+  namespace: default
+spec:
+  tls:
+    - hosts:
+      - tika.inovio.tech-stack.dev
+      secretName: tika-inovio-tls
+  rules:
+  - host: tika.inovio.tech-stack.dev
+    http:
+      paths:
+      - backend:
+          serviceName: release-name-tika-server
+          servicePort: 9998
+        path: /

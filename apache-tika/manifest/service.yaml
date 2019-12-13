@@ -1,0 +1,16 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-tika-server
+  labels:
+    app: release-name-tika-server
+spec:
+  type: ClusterIP
+  ports:
+  - port: 9998
+    targetPort: 9998
+    protocol: TCP
+    name: tika
+  selector:
+    app: release-name-tika-server

@@ -1,0 +1,39 @@
+---
+# Source: tika-server/templates/deployment.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: release-name-tika-server
+  labels:
+    app: release-name-tika-server
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: release-name-tika-server
+    spec:
+      containers:
+      - name: release-name-tika-server
+        image: "arila33/axmsoftware-npi:apache-tika"
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: TIKA_VERSION
+          value: "1.22"
+        ports:
+        - containerPort: 9998
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 9998
+          initialDelaySeconds: 40
+          periodSeconds: 5
+          timeoutSeconds: 5
+          failureThreshold: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 9998
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 1
