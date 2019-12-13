@@ -1,0 +1,17 @@
+---
+# Source: optaplanner-server/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-optaplanner-server
+  labels:
+    app: release-name-optaplanner-server
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    name: opta
+  selector:
+    app: optaplanner

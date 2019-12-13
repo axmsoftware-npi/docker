@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: optaplanner
+  name: optaplanner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: optaplanner
+  template:
+    metadata:
+      labels:
+        app: optaplanner
+    spec:
+      containers:
+      - env: 
+        - name: JAVA_OPTS
+          value: "-server -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true -Djboss.as.management.blocking.timeout=6000 -Dorg.kie.server.user=planner -Dorg.kie.server.pwd=Planner123_ -Dorg.kie.server.controller.user=planner -Dorg.kie.server.controller.pwd=Planner123_ -Dorg.kie.server.id=wildfly-kieserver -Dorg.kie.server.location=http://localhost:8080/kie-server/services/rest/server -Dorg.kie.server.controller=http://localhost:8080/business-central/rest/controller"
+        image: arila33/axmsoftware-npi:optaplanner
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 50
+          httpGet:
+            path: /
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 50
+          successThreshold: 1
+          timeoutSeconds: 50
+        name: release-name-optaplanner-workbench
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
