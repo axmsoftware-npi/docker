@@ -1,0 +1,104 @@
+---
+# Source: orientdb/templates/statefulset.yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: release-name-orientdb
+  labels:
+    app: orientdb
+    chart: orientdb-0.1.2
+    release: release-name
+    heritage: Tiller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orientdb
+      release: release-name
+  serviceName: release-name-orientdb-headless
+  template:
+    metadata:
+      labels:
+        app: orientdb
+        release: release-name
+    spec:
+      terminationGracePeriodSeconds: 10
+      initContainers:
+        # orientdb-server-config.xml is an executable file while kubernetes mounts
+        # configmaps as read-only (since 1.94). This is a workaround to mount it as
+        # configmap first and then copy it over to its final location
+      - name: "fix-orientdb-server-config"
+        image: "busybox"
+        imagePullPolicy: IfNotPresent
+        command: [ "sh", "-c", "cp  /configmap/* /config" ]
+        volumeMounts:
+        - name: orientdb-configmap-vol
+          mountPath: /configmap
+        - name: orientdb-config-vol
+          mountPath: /config
+
+      containers:
+      - name: orientdb
+        image: "orientdb:3.0.13"
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 2480
+            name: http
+          - containerPort: 2434
+            name: hazelcast
+          - containerPort: 2424
+            name: binary
+          - containerPort: 8182
+            name: gremlin
+        env:
+          - name: ORIENTDB_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: release-name-orientdb-secret
+                key: root-password
+          - name: ORIENTDB_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+        volumeMounts:
+          - name: orientdb-config-vol
+            mountPath: /orientdb/config/hazelcast.xml
+            subPath: hazelcast.xml
+          - name: orientdb-config-vol
+            mountPath: /orientdb/config/default-distributed-db-config.json
+            subPath: default-distributed-db-config.json
+          - name: storage
+            mountPath: /orientdb/databases
+          - name: backup
+            mountPath: /orientdb/backup
+        readinessProbe:
+          tcpSocket:
+            port: http
+        livenessProbe:
+          tcpSocket:
+            port: http
+        command: ["server.sh"]
+        resources:
+            null
+            
+      volumes:
+        - name: orientdb-configmap-vol
+          configMap:
+            name: release-name-orientdb-configmap
+        - name: orientdb-config-vol
+          emptyDir: {}
+  volumeClaimTemplates:
+  - metadata:
+      name: storage
+    spec:
+      accessModes: [ReadWriteOnce]
+      resources:
+        requests:
+          storage: 10Gi
+  - metadata:
+      name: backup
+    spec:
+      accessModes: [ReadWriteOnce]
+      resources:
+        requests:
+          storage: 2Gi

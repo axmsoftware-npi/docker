@@ -9,10 +9,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - tika.inovio.tech-stack.dev
+      - tika.inovio.co
       secretName: tika-inovio-tls
   rules:
-  - host: tika.inovio.tech-stack.dev
+  - host: tika.inovio.co
     http:
       paths:
       - backend:
