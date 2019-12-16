@@ -1,0 +1,60 @@
+---
+# Source: orientdb/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-orientdb-headless
+  labels:
+    app: orientdb
+    chart: orientdb-0.1.2
+    release: release-name
+    heritage: Tiller
+spec:
+  type: ClusterIP
+  ports:
+    - port: 2480
+      targetPort: http
+      name: http
+    - port: 2434
+      targetPort: hazelcast
+      name: hazelcast
+    - port: 2424
+      targetPort: binary
+      name: binary
+    - port: 8182
+      targetPort: gremlin
+      name: gremlin
+      
+  # headless service
+  clusterIP: None    
+  selector:
+    app: orientdb
+    release: release-name
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-orientdb-svc
+  labels:
+    app: orientdb
+    chart: orientdb-0.1.2
+    release: release-name
+    heritage: Tiller
+spec:
+  type: NodePort
+  ports:
+    - port: 2480
+      targetPort: http
+      name: http
+    - port: 2434
+      targetPort: hazelcast
+      name: hazelcast
+    - port: 2424
+      targetPort: binary
+      name: binary
+    - port: 8182
+      targetPort: gremlin
+      name: gremlin
+  selector:
+    app: orientdb
+    release: release-name
