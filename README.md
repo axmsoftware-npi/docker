@@ -27,7 +27,7 @@ docker push arila33/axmsoftware-npi:tagname
 
  - external dns controller https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/nginx-ingress.md
  	* apply the followin manifest from this manual with your values
- 	  ```https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/nginx-ingress.md#deploy-externaldns```
+ 	  https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/nginx-ingress.md#deploy-externaldns
 
 - cert manager with letsencrypt https://cert-manager.io/docs/installation/kubernetes/
   	* installing via helm
