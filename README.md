@@ -30,18 +30,23 @@ docker push arila33/axmsoftware-npi:tagname
  	  https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/nginx-ingress.md#deploy-externaldns
 
 - cert manager with letsencrypt https://cert-manager.io/docs/installation/kubernetes/
-  	* installing via helm
-	    Install the CustomResourceDefinition resources separately:
+
+	*    Install the CustomResourceDefinition resources separately:
 	    ```kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.12/deploy/manifests/00-crds.yaml```
-	    Create the namespace for manager:
+
+	*    Create the namespace for manager:
 	    ```kubectl create namespace cert-manager```
-	    Add helm repo:
+
+	*    Add helm repo:
 	    ```helm repo add jetstack https://charts.jetstack.io```
-	    Update local charts repo:
+
+	*    Update local charts repo:
 	    ```helm repo update```
-	    Install the cert-manager:
+
+	*    Install the cert-manager:
 	    ```helm install --name cert-manager --namespace cert-manager --version v0.12.0 jetstack/cert-manager```
-	    Verify the installation:
+
+	*   Verify the installation:
 	    ```kubectl get pods --namespace cert-manager
 		NAME                                       READY   STATUS    RESTARTS   AGE
 		cert-manager-6bcc9d894d-wwb96              1/1     Running   1          14d
