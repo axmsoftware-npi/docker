@@ -3,7 +3,6 @@ Repositories for docker containers
 Stable images should be pushed to DockerHub Repo: arila33/axmsoftware-npi
 docker push arila33/axmsoftware-npi:tagname
 
-
 # requirements:
  - nginx ingress controller https://cloud.google.com/community/tutorials/nginx-ingress-gke
    some basic steps:
@@ -69,14 +68,4 @@ docker push arila33/axmsoftware-npi:tagname
  		```
  		kubectl create --edit -f https://netlify.cert-manager.io/docs/tutorials/acme/example/production-issuer.yaml
  		```
-
-
-
-
-
-
-
-
-
-
-
+## Please add folder for each containerized service here
