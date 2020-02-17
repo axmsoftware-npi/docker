@@ -1,5 +1,5 @@
 variable "tika_address" {
-  default = "https://tika.inovio.tech-stack.dev"
+  default = "https://tika.k8s.inovio.co/"
 }
 
 variable "runtime" {
