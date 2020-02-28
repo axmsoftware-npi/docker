@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: webgcode
+spec:
+  template:
+    metadata:
+      labels:
+        app: webgcode
+    spec:
+      containers:
+      - name: webgcode
+        image: gcr.io/inovio/webgcode:latest
+        ports:
+        - containerPort: 80
