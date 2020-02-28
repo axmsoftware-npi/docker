@@ -8,10 +8,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - optaplanner.inovio.tech-stack.dev
+      - optaplanner.k8s.inovio.co
       secretName: optaplanner-inovio-tls
   rules:
-  - host: optaplanner.inovio.tech-stack.dev
+  - host: optaplanner.k8s.inovio.co
     http:
       paths:
       - backend:
