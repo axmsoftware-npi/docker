@@ -4,6 +4,9 @@ Put to the provider.tf your GCP project name, region and path to your credential
 
 Create manually bucket for the tf state and change bucket name in backend.tf (techstack-terraform-state in this example)
 
+Please install terraform:
+https://learn.hashicorp.com/terraform/getting-started/install.html
+
 Run:
 * terraform init
 * terraform plan 
