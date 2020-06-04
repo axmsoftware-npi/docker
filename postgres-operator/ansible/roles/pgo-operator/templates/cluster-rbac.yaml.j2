@@ -1,0 +1,48 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: postgres-operator
+  namespace: {{ pgo_operator_namespace }}
+imagePullSecrets:
+{% if ccp_image_pull_secret %}
+  - name: {{ ccp_image_pull_secret }}
+{% endif %}
+{% if pgo_image_pull_secret and ccp_image_pull_secret != pgo_image_pull_secret %}
+  - name: {{ pgo_image_pull_secret }}
+{% endif %}
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: pgo-cluster-role
+rules:
+  - verbs:
+      - '*'
+    apiGroups:
+      - '*'
+    resources:
+      - namespaces
+      - serviceaccounts
+      - roles
+      - rolebindings
+  - verbs:
+      - 'list'
+      - 'get'
+    apiGroups:
+      - '*'
+    resources:
+      - nodes
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: pgo-cluster-role
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: pgo-cluster-role
+subjects:
+- apiGroup: rbac.authorization.k8s.io
+  kind: User
+  name: system:serviceaccount:{{ pgo_operator_namespace }}:postgres-operator
