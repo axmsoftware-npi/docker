@@ -68,4 +68,4 @@ docker push arila33/axmsoftware-npi:tagname
  		```
  		kubectl create --edit -f https://netlify.cert-manager.io/docs/tutorials/acme/example/production-issuer.yaml
  		```
-## Please add folder for each containerized service here
+

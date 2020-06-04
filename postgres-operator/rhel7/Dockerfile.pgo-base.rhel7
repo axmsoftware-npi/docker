@@ -1,0 +1,28 @@
+ARG BASEOS
+ARG RELVER
+FROM registry.access.redhat.com/${BASEOS}
+
+MAINTAINER info@crunchydata.com
+
+LABEL vendor="Crunchy Data" \
+	url="https://crunchydata.com" \
+	release="${RELVER}" \
+	postgresql.version.major="12" \
+	postgresql.version="12.2" \
+	os.version="7.7" \
+	org.opencontainers.image.vendor="Crunchy Data" \
+	io.openshift.tags="postgresql,postgres,sql,nosql,crunchy" \
+	io.k8s.description="Trusted open source PostgreSQL-as-a-Service"
+
+COPY redhat/licenses /licenses
+COPY redhat/atomic/help.1 /help.1
+COPY redhat/atomic/help.md /help.md
+COPY licenses /licenses
+
+RUN yum -y --enablerepo=rhel-7-server-ose-3.11-rpms update && \
+	yum -y --enablerepo=rhel-7-server-ose-3.11-rpms clean all
+
+# Crunchy PostgreSQL repository
+ADD conf/RPM-GPG-KEY-crunchydata  /
+ADD conf/crunchypg12.repo /etc/yum.repos.d/
+RUN rpm --import RPM-GPG-KEY-crunchydata

@@ -1,0 +1,12 @@
+---
+- name: Create Watched Namespaces
+  shell: "{{ target_ns_script }}"
+  vars:
+    target_namespace: !unsafe "{{.TargetNamespace}}"
+    operator_namespace: !unsafe "{{.OperatorNamespace}}"
+    target_ns_script: "{{ lookup('template', 'add-targeted-namespace.sh.j2') }}"
+  with_items: "{{ namespace.split(',') }}"
+  when: namespace != ''
+  tags:
+  - install
+  - update

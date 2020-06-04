@@ -15,32 +15,34 @@ spec:
         app: optaplanner
     spec:
       containers:
-      - env: 
-        - name: JAVA_OPTS
-          value: "-server -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true -Djboss.as.management.blocking.timeout=6000 -Dorg.kie.server.user=planner -Dorg.kie.server.pwd=Planner123_ -Dorg.kie.server.controller.user=planner -Dorg.kie.server.controller.pwd=Planner123_ -Dorg.kie.server.id=wildfly-kieserver -Dorg.kie.server.location=http://localhost:8080/kie-server/services/rest/server -Dorg.kie.server.controller=http://localhost:8080/business-central/rest/controller"
-        image: gcr.io/inovio/optaplanner:latest
-        imagePullPolicy: Always
-        livenessProbe:
-          failureThreshold: 50
-          httpGet:
-            path: /
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 120
-          periodSeconds: 50
-          successThreshold: 1
-          timeoutSeconds: 300
-        name: release-name-optaplanner-workbench
-        ports:
-        - containerPort: 8080
-          protocol: TCP
-        readinessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /
-            port: 8080
-            scheme: HTTP
-          initialDelaySeconds: 120
-          periodSeconds: 5
-          successThreshold: 1
-          timeoutSeconds: 300
+        - name: release-name-optaplanner-workbench
+          env: 
+          - name: JAVA_OPTS
+            value: "-Xms256m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=512m -Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8"
+          image: jboss/jbpm-workbench-showcase:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 50
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 120
+            periodSeconds: 50
+            successThreshold: 1
+            timeoutSeconds: 300
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 8001
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 120
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 300
