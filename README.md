@@ -3,7 +3,6 @@ Repositories for docker containers
 Stable images should be pushed to DockerHub Repo: arila33/axmsoftware-npi
 docker push arila33/axmsoftware-npi:tagname
 
-
 # requirements:
  - nginx ingress controller https://cloud.google.com/community/tutorials/nginx-ingress-gke
    some basic steps:
@@ -69,22 +68,4 @@ docker push arila33/axmsoftware-npi:tagname
  		```
  		kubectl create --edit -f https://netlify.cert-manager.io/docs/tutorials/acme/example/production-issuer.yaml
  		```
-
-- configure google cloud builds with docker hub https://cloud.google.com/cloud-build/docs/interacting-with-dockerhub-images
-
-	* Create a Cloud KMS KeyRing and CryptoKey, if you do not already have one:
-	```
-			gcloud kms keyrings create [KEYRING-NAME] --location=global
- ```
-  	* Create a CryptoKey:
-    ```
-    	gcloud kms keys create inovio --location=global --keyring=inovio --purpose=encryption
-    ```
-
-
-
-
-
-
-
 
