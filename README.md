@@ -1,11 +1,53 @@
-# docker
-Repositories for docker containers
-Stable images should be pushed to DockerHub Repo: arila33/axmsoftware-npi
-docker push arila33/axmsoftware-npi:tagname
 
 
 # requirements:
- - nginx ingress controller https://cloud.google.com/community/tutorials/nginx-ingress-gke
+ - installed kubectl:
+    Download the latest release:
+    ```
+    curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/darwin/amd64/kubectl"
+   ```   
+    Make the kubectl binary executable.
+    ```
+    chmod +x ./kubectl
+    ```
+    Move the binary in to your PATH.
+    ```
+    sudo mv ./kubectl /usr/local/bin/kubectl
+    ```
+    Test to ensure the version you installed is up-to-date:
+    ```
+    kubectl version
+   ```
+- install helm2
+   ```
+     curl -LO "https://get.helm.sh/helm-v2.16.12-darwin-amd64.tar.gz" 
+   ```
+  Extract tar
+  ```
+     tar -zxvf helm-v2.0.0-linux-amd64.tgz
+  ```
+  Move the binary in to your PATH.
+  ```
+     sudo mv linux-amd64/helm /usr/local/bin/helm
+  ```
+  Make the helm binary executable.
+  ```
+     sudo chmod +x /usr/local/bin/helm
+  ```
+     From there, you should be able to run the client:
+   ``` 
+     helm help
+   ```
+  
+- create kubeconfig:
+   ```
+    gcloud container clusters get-credentials inovio-k8s --region europe-west3 --project inovio
+   ```
+- Test to ensure that kubeconfig was added:
+   ```
+    kubectl get pods
+  ```  
+ - install nginx ingress controller https://cloud.google.com/community/tutorials/nginx-ingress-gke
    some basic steps:
     * install helm to your cluster https://helm.sh/docs/intro/install/
        ```
@@ -31,15 +73,17 @@ docker push arila33/axmsoftware-npi:tagname
 		NAME                       TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S)                      AGE
 		nginx-ingress-controller   LoadBalancer   some_private_ip some_public_ip   80:30890/TCP,443:30258/TCP   3m
 		```
- - external dns controller https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/nginx-ingress.md
+ - install external dns controller https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/nginx-ingress.md
  	* apply the followin manifest from this manual with your values
+ 	  ```
  	  https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/nginx-ingress.md#deploy-externaldns
+      ```
 
-- cert manager with letsencrypt https://cert-manager.io/docs/installation/kubernetes/
+- install cert manager with letsencrypt https://cert-manager.io/docs/installation/kubernetes/
 
 	*    Install the CustomResourceDefinition resources separately:
 	    ```
-	    kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.12/deploy/manifests/00-crds.yaml
+	     kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.12/deploy/manifests/00-crds.yaml
 	    ```
 	*    Create the namespace for manager:
 	    ```
@@ -60,26 +104,16 @@ docker push arila33/axmsoftware-npi:tagname
 	*   Verify the installation:
 	    ```
 	    kubectl get pods --namespace cert-manager
-		NAME                                       READY   STATUS    RESTARTS   AGE
-		cert-manager-6bcc9d894d-wwb96              1/1     Running   1          14d
-		cert-manager-cainjector-594fd9cc45-czdwn   1/1     Running   6          14d
-		cert-manager-webhook-785ff8fc78-zrz2t      1/1     Running   0          14d
+		   NAME                                       READY   STATUS    RESTARTS   AGE
+		   cert-manager-6bcc9d894d-wwb96              1/1     Running   1          14d
+		   cert-manager-cainjector-594fd9cc45-czdwn   1/1     Running   6          14d
+		   cert-manager-webhook-785ff8fc78-zrz2t      1/1     Running   0          14d
 		```
  	* create issuer for obtaining certs https://cert-manager.io/docs/tutorials/acme/ingress/
  		```
  		kubectl create --edit -f https://netlify.cert-manager.io/docs/tutorials/acme/example/production-issuer.yaml
  		```
 
-- configure google cloud builds with docker hub https://cloud.google.com/cloud-build/docs/interacting-with-dockerhub-images
-
-	* Create a Cloud KMS KeyRing and CryptoKey, if you do not already have one:
-	```
-			gcloud kms keyrings create [KEYRING-NAME] --location=global
- ```
-  	* Create a CryptoKey:
-    ```
-    	gcloud kms keys create inovio --location=global --keyring=inovio --purpose=encryption
-    ```
 
 
 
