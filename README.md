@@ -24,7 +24,7 @@
    ```
   Extract tar
   ```
-     tar -zxvf helm-v2.0.0-linux-amd64.tgz
+     tar -zxvf helm-v2.16.12-darwin-amd64.tar.gz
   ```
   Move the binary in to your PATH.
   ```
