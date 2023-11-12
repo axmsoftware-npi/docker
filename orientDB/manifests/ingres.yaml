@@ -9,10 +9,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - orientdb.inovio.co
+      - orientdb.k8s.inovio.co
       secretName: db-inovio-tls
   rules:
-  - host: orientdb.inovio.co
+  - host: orientdb.k8s.inovio.co
     http:
       paths:
       - backend:

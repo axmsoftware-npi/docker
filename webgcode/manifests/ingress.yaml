@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/issuer: "letsencrypt-prod"
+  name: webgcode
+spec:
+  tls:
+    - hosts:
+      - gcode.k8s.inovio.co
+      secretName: webgcode-inovio-tls
+  rules:
+  - host: gcode.k8s.inovio.co
+    http:
+      paths:
+      - backend:
+          serviceName: webgcode
+          servicePort: webgcode-http
+        path: /

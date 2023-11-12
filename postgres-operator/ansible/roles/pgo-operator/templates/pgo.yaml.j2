@@ -1,0 +1,76 @@
+Cluster:
+  PrimaryNodeLabel:
+  ReplicaNodeLabel:
+  CCPImagePrefix:  {{ ccp_image_prefix }}
+  CCPImageTag:  {{ ccp_image_tag }}
+  DisableAutofail:  {{ disable_auto_failover }}
+  Backrest:  {{ backrest }}
+  BackrestPort:  {{ backrest_port }}
+  BackrestS3Bucket: {{ backrest_aws_s3_bucket }}
+  BackrestS3Endpoint: {{ backrest_aws_s3_endpoint }}
+  BackrestS3Region: {{ backrest_aws_s3_region }}
+  Metrics:  {{ metrics }}
+  Badger:  {{ badger }}
+  Port:  {{ db_port }}
+  PGBadgerPort: {{ pgbadgerport }}
+  ExporterPort: {{ exporterport }}
+  User:  {{ db_user}}
+  Database:  {{ db_name }}
+  PasswordAgeDays:  {{ db_password_age_days }}
+  PasswordLength:  {{ db_password_length }}
+  Strategy:  1
+  Replicas:  {{ db_replicas }}
+  ArchiveMode:  {{ archive_mode }}
+  ArchiveTimeout:  {{ archive_timeout }}
+  ServiceType:  {{ service_type }}
+  LogStatement: {{ log_statement }}
+  LogMinDurationStatement:  {{ log_min_duration_statement }}
+  EnableCrunchyadm:  {{ enable_crunchyadm }}
+  DisableReplicaStartFailReinit:  {{ disable_replica_start_fail_reinit }}
+  PodAntiAffinity:  {{ pod_anti_affinity }}
+  SyncReplication:  {{ sync_replication }}
+PrimaryStorage: {{ primary_storage }}
+BackupStorage: {{ backup_storage }}
+ReplicaStorage: {{ replica_storage }}
+BackrestStorage: {{ backrest_storage }}
+Storage:
+{% for i in range(1, max_storage_configs) %}
+{% if lookup('vars', 'storage' + i|string + '_name', default='')  != '' %}
+  {{ lookup('vars', 'storage' + i|string + '_name', default='') }}:
+    AccessMode:  {{ lookup('vars', 'storage' + i|string + '_access_mode') }}
+    Size:  {{ lookup('vars', 'storage' + i|string + '_size') }}
+    StorageType:  {{ lookup('vars', 'storage' + i|string + '_type') }}
+{% if lookup('vars', 'storage' + i|string + '_match_labels', default='') != '' %}
+    MatchLabels: {{ lookup('vars', 'storage' + i|string + '_match_labels') }}
+{% endif %}
+{% if lookup('vars', 'storage' + i|string + '_class', default='') != '' %}
+    StorageClass: {{ lookup('vars', 'storage' + i|string + '_class') }}
+{% endif %}
+{% if lookup('vars', 'storage' + i|string + '_supplemental_groups', default='') != '' %}
+    SupplementalGroups: {{ lookup('vars', 'storage' + i|string + '_supplemental_groups') }}
+{% endif %}
+{% if lookup('vars', 'storage' + i|string + '_fs_group', default='') != '' %}
+    Fsgroup: {{ lookup('vars', 'storage' + i|string + '_fs_group') }}
+{% endif %}
+{% endif %}
+{% endfor %}
+DefaultContainerResources: {{ default_container_resources }}
+DefaultLoadResources: {{ default_load_resources }}
+DefaultRmdataResources: {{ default_rmdata_resources }}
+DefaultBackupResources: {{ default_backup_resources }}
+DefaultPgbouncerResources: {{ default_pgbouncer_resources }}
+ContainerResources:
+{% for i in range(1, max_resource_configs) %}
+{% if lookup('vars', 'resource' + i|string + '_name', default='')  != '' %}
+  {{ lookup('vars', 'resource' + i|string + '_name', default='') }}:
+    RequestsMemory: {{ lookup('vars', 'resource' + i|string + '_requests_memory') }}
+    RequestsCPU: {{ lookup('vars', 'resource' + i|string + '_requests_cpu') }}
+    LimitsMemory: {{ lookup('vars', 'resource' + i|string + '_limits_memory') }}
+    LimitsCPU: {{ lookup('vars', 'resource' + i|string + '_limits_cpu') }}
+{% endif %}
+{% endfor %}
+Pgo:
+  Audit:  false
+  LoadTemplate:  /pgo-config/pgo.load-template.json
+  PGOImagePrefix:  {{ pgo_image_prefix }}
+  PGOImageTag:  {{ pgo_image_tag }}

@@ -3,15 +3,10 @@ kind: Ingress
 metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
-    cert-manager.io/issuer: "letsencrypt-prod"
   name: optaplanner
 spec:
-  tls:
-    - hosts:
-      - optaplanner.inovio.tech-stack.dev
-      secretName: optaplanner-inovio-tls
   rules:
-  - host: optaplanner.inovio.tech-stack.dev
+  - host: optaplanner.clearslideng.com
     http:
       paths:
       - backend:
