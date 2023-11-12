@@ -1,5 +1,4 @@
 
-
 # requirements:
  - installed kubectl:
     Download the latest release:
@@ -114,11 +113,4 @@
  		kubectl create --edit -f https://netlify.cert-manager.io/docs/tutorials/acme/example/production-issuer.yaml
  		```
 
-
-
-
-
-
-
-
-
+=======
